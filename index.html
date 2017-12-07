@@ -1,0 +1,78 @@
+<!doctype html>
+<html ng-app="movieCatalogue">
+	<head>
+		<title>Movie Search</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    	<script type="text/javascript">
+    		var testApp = angular.module('movieCatalogue', []);
+				testApp.controller('movieSearch', function($scope, $http) {
+
+					$scope.getRequest = function () {
+
+							// us s instead of t and parse the top three movies
+					    $http.get('http://www.omdbapi.com/?s='+$scope.txtSearch+'&apikey=18ba67eb').
+					        then(function(response) {
+					            var resp = response.data;
+					            $scope.searchData = resp.Search;
+					            //alert($scope.searchData);
+					            //$scope.MovieData = searchData[0];
+					        });
+				    };
+				});
+    	</script>
+
+    	<style type="text/css">
+
+    		.center-align{
+    			margin-left: 33%;
+    		}
+    		.blk-dp{
+    			display: block;
+    		}
+    		.lbls{
+    			font-size: 18px;
+    			font-weight: bold;
+    		}
+    		.container{
+			background: lightblue;
+    		}
+    		button{
+    			margin-bottom: 10px;
+    		}
+
+			#srchbx{
+				margin-left: 5%;
+				padding-left: 2%;
+				margin-right: 5%;
+			}
+
+    	</style>
+	</head>
+
+	<body>
+	
+		<div>
+		
+			<div ng-controller="movieSearch">
+				<div id="srchbx">
+					<h1> Searh a Movie </h1>
+					<input type='textbox' ng-model='txtSearch' name='txtSearch'>
+					<button ng-click="getRequest()">Test Rest</button>
+				</div>
+
+				<div class="container">
+						<div ng-repeat="n in searchData | limitTo:3" class="center-align">
+							
+							<label class="lbls">Movie Name: </label><label> {{n.Title}}</label>
+							<label class="lbls blk-dp">Release Year: </label><label> {{n.Year}}</label>
+							
+							<a href="#"  class="blk-dp" > 
+								<img ng-src="{{n.Poster}}"/>
+							</a>
+						</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
